@@ -34,18 +34,16 @@ app.whenReady().then(() => {
     : path.join(__dirname, "server"); // dev mode server folder
   console.log(serverPath, "serverpath");
   // Start backend Node process
-  backendProcess = spawn("node", [path.join(serverPath, "index.js")], {
-    stdio: "inherit",
-  });
+  backendProcess = spawn("node", [path.join(serverPath, "index.js")]);
 
-  backendProcess.on("error", (err) => {
-    console.error("Failed to start backend process:", err);
+  backendProcess.stdout.on("data", (data) => {
+    console.log(`Backend stdout: ${data}`);
   });
-
-  backendProcess.on("exit", (code, signal) => {
-    console.log(
-      `Backend process exited with code ${code} and signal ${signal}`
-    );
+  backendProcess.stderr.on("data", (data) => {
+    console.error(`Backend stderr: ${data}`);
+  });
+  backendProcess.on("close", (code) => {
+    console.log(`Backend process exited with code ${code}`);
   });
 
   createWindow();

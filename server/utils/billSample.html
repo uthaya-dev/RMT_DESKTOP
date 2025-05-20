@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- <link rel="stylesheet" href="billSample.css" /> -->
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: sans-serif;
+        padding: 10px;
+      }
+
+      html,
+      body {
+        width: 210mm;
+        height: 148.5mm;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      .invoiceWrapper {
+        height: 100%;
+      }
+
+      .invoiceContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        border: 1px solid rgb(177, 177, 177);
+      }
+
+      header .container .box {
+        padding: 0.2rem;
+        font-size: 10px;
+        line-height: 1.2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      header .container .imageBox {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      header .container .box span {
+        font-weight: bold;
+        margin-right: 0.5rem;
+      }
+
+      header .container .box:nth-of-type(1) {
+        border-bottom: 1px solid rgb(177, 177, 177);
+        border-right: 1px solid rgb(177, 177, 177);
+      }
+
+      header .container .box:nth-of-type(2) {
+        border-bottom: 1px solid rgb(177, 177, 177);
+      }
+
+      header .container .box:nth-of-type(3) {
+        border-right: 1px solid rgb(177, 177, 177);
+      }
+
+      .mainHeading {
+        font-size: 0.6rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+
+      .red {
+        color: #ff0c02;
+      }
+
+      .secondary-heading {
+        font-size: 0.6rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        margin-top: 5px;
+      }
+
+      .mainTable {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        table-layout: fixed; /* important for fixed widths */
+        height: 100%;
+        border: 1px solid rgb(177, 177, 177);
+        border-bottom: none;
+      }
+
+      .mainTable tbody {
+        display: block;
+        flex: 1 1 auto;
+        overflow-y: auto;
+        width: 100%;
+      }
+
+      .mainTable thead tr,
+      .mainTable tfoot tr,
+      .mainTable tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        height: 10px; /* fixed row height */
+      }
+
+      .mainTable thead th,
+      .mainTable tbody td,
+      .mainTable tfoot td {
+        padding: 0 3px;
+        height: 10px;
+        line-height: 12px;
+        /* border: 1px solid rgb(177, 177, 177); */
+        text-align: center;
+      }
+
+      th {
+        background-color: #ff0c02;
+        color: #fff;
+        font-weight: normal;
+      }
+
+      .mainTable thead th {
+        border-top: none;
+      }
+
+      .mainTable tbody th,
+      .mainTable tbody td {
+        border-top: none;
+      }
+
+      th,
+      td {
+        border: 1px solid rgb(177, 177, 177);
+        padding: 3px;
+        text-align: center;
+      }
+
+      .mainTable :nth-of-type(1),
+      .mainTable td:nth-of-type(1) {
+        border-left: none;
+      }
+
+      th:nth-last-of-type(1),
+      td:nth-last-of-type(1) {
+        border-right: none !important;
+        border-left: none;
+      }
+
+      thead {
+        background-color: #f0f0f0;
+      }
+
+      tbody {
+        height: 100%;
+      }
+      tfoot td {
+        background-color: #e0e0e0;
+      }
+
+      .right {
+        text-align: right;
+      }
+
+      .totalsTable {
+        margin-top: auto;
+      }
+
+      .totalsTable table tr td {
+        line-height: 7px;
+        font-size: 10px;
+      }
+
+      footer {
+        margin-top: 10px;
+        font-size: 10px;
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid rgb(177, 177, 177);
+      }
+
+      .footer-box {
+        padding: 2px;
+        line-height: 1.4;
+      }
+
+      .footer-box:nth-of-type(1),
+      .footer-box:nth-of-type(2) {
+        border-right: 1px solid rgb(177, 177, 177);
+        width: 35%;
+      }
+
+      .footer-box:nth-of-type(3) {
+        width: 20%;
+      }
+
+      .footer-box .footer-heading {
+        font-size: 10px;
+      }
+
+      .certify {
+        font-size: 10px;
+        margin-top: 1rem;
+      }
+
+      @media print {
+        @page {
+          size: 210mm 148.5mm;
+          margin: 0;
+        }
+
+        body {
+          margin: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoiceWrapper">
+      <div class="invoiceContainer">
+        <header>
+          <div class="container">
+            <div class="box">
+              <p class="mainHeading red">ROOF METAL TRADERS</p>
+              <p>
+                PATTA NO: 3948, PUNJAI NEW SURVEY NO; 2/10 SIVARAMA PETTAI,
+                TENKASI, Tamilnadu
+              </p>
+              <p><span>Phone:</span>6379115436</p>
+              <p><span>GSTIN:</span>GSTIN:33FMPPA9602G1Z3</p>
+            </div>
+            <div class="box imageBox">
+              <div class="content">
+                <p class="mainHeading">TAX INVOICE</p>
+                <p><span>Invoice No:</span>{{invoiceNumber}}</p>
+                <p><span>Invoice Date:</span>{{date}}</p>
+                <p><span>Email ID:</span>{{customerEmail}}</p>
+              </div>
+              <img src="{{logoBase64}}" alt="Logo" style="height: 80px" />
+            </div>
+            <div class="box">
+              <p class="secondary-heading">Bill To</p>
+              <p>
+                Dummy addres: Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Tamilnadu
+              </p>
+              <p><span>Phone</span>6379115436</p>
+              <p><span>GSTIN</span>GSTIN:33FMPPA9602G1Z3</p>
+            </div>
+            <div class="box">
+              <p class="secondary-heading">Ship To</p>
+              <p>
+                Dummy addres: Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Tamilnadu
+              </p>
+              <p><span>Phone</span>6379115436</p>
+              <p><span>GSTIN</span>GSTIN:33FMPPA9602G1Z3</p>
+            </div>
+          </div>
+        </header>
+
+        <table class="mainTable">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th style="width: 270px">Item</th>
+              <th style="width: 100px">HSN</th>
+              <th>Length</th>
+              <th>Unit</th>
+              <th>Pcs</th>
+              <th>Qty (Feet)</th>
+              <th>Rate</th>
+              <th>Tax</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each items}}
+            <tr>
+              <td>{{sno}}</td>
+              <td style="width: 270px">{{productName}}</td>
+              <td style="width: 100px">{{hsn}}</td>
+              <td>{{length}}</td>
+              <td>{{unit}}</td>
+              <td>{{pcs}}</td>
+              <td>{{quantity}}</td>
+              <td style="text-align: left">{{rate}}</td>
+              <td>{{tax}}</td>
+              <td style="text-align: left">{{finalAmount}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td style="width: 270px"></td>
+              <td style="width: 100px"></td>
+              <td></td>
+              <td></td>
+              <td>{{totalPieces}}</td>
+              <td>{{totalQuantity}}</td>
+              <td colspan="2" class="right">
+                <strong>Total</strong>
+              </td>
+              <td>{{totalBaseAmount}}</td>
+            </tr>
+          </tfoot>
+        </table>
+        <div class="totalsTable">
+          <table>
+            <tr>
+              <td class="right">
+                <strong>18% Taxable Value</strong>
+              </td>
+              <td>{{totalTaxableAmount}}</td>
+              <td class="right"><strong>CGST @ 9%</strong></td>
+              <td>{{totalCGST}}</td>
+              <td class="right"><strong>SGST @ 9%</strong></td>
+              <td>{{totalSGST}}</td>
+              <td class="right"><strong>18% Taxable Amount</strong></td>
+              <td>{{totalGSTAmount}}</td>
+              <!-- <td class="right"><strong>Crimping Charges</strong></td>
+            <td>{{crimpingCharges}}</td> -->
+            </tr>
+            <tr>
+              <td class="right"><strong>Delivery Charges</strong></td>
+              <td>{{deliveryCharges}}</td>
+              <td class="right"><strong>Special Discount</strong></td>
+              <td>{{totalDiscount}}</td>
+              <td class="right"><strong>Round Off</strong></td>
+              <td>{{roundingOff}}</td>
+              <td class="right"><strong>Net Total (Rupees)</strong></td>
+              <td><strong>{{totalAmount}}</strong></td>
+            </tr>
+          </table>
+          <p class="certify">Amount in words {{amountInWords}}</p>
+          <p class="certify">
+            Certified that the particulars given above are true and correct
+          </p>
+
+          <footer>
+            <div class="footer-box">
+              <p class="footer-heading">Bank Details</p>
+              <p><span>Account Name:</span>{{customerName}}</p>
+              <p><span>Bank Name:</span>{{customerBank}}</p>
+              <p><span>Account Number:</span>{{customerACNumber}}</p>
+              <p><span>Branch:</span>{{accountBranch}}</p>
+              <p><span>IFSC Code:</span>{{ifscCode}}</p>
+            </div>
+            <div class="footer-box">
+              <p class="footer-heading">Transporation Details</p>
+              <p><span>Transporation Mode:</span> {{transportationMode}}</p>
+              <p><span>Vehicle Number:</span>{{vehicleNumber}}</p>
+              <p><span>Driver Name:</span>{{driverName}}</p>
+              <p><span>Contact Number</span>{{driverContactNumber}}</p>
+              <p><span>Delivery Place:</span>{{deliveryPlace}}</p>
+            </div>
+            <div class="footer-box">
+              <p>For Roof Metal Traders</p>
+              <p>Authorized Signatory</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

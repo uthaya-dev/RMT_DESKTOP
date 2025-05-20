@@ -23,7 +23,7 @@
     }
   },
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\" \"electron-forge start\"",
+    "dev": "concurrently \"npm run client\" \"electron-forge start\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
     "build-client": "cd client && npm run build",

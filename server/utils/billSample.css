@@ -1,0 +1,151 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.half-a4 {
+  width: 148mm;
+  height: 210mm;
+  box-sizing: border-box;
+  padding: 2mm;
+  margin: 0 auto;
+
+  /* For print */
+  page-break-after: always;
+}
+
+.a4 {
+  width: 210mm;
+  height: 297mm;
+  box-sizing: border-box;
+  padding: 4mm; /* Safe inner space */
+  margin: 0 auto; /* Center in print preview */
+
+  /* Optional: ensure each page breaks cleanly */
+  page-break-after: always;
+
+  /* Optional: border for visual debugging (remove before final print) */
+  border: 1px solid #ccc;
+}
+
+header .container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  border: 1px solid rgb(177, 177, 177);
+}
+
+header .container .box {
+  padding: 0.5rem;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+header .container .box span {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+header .container .box:nth-of-type(1) {
+  border-bottom: 1px solid rgb(177, 177, 177);
+  border-right: 1px solid rgb(177, 177, 177);
+}
+
+header .container .box:nth-of-type(2) {
+  border-bottom: 1px solid rgb(177, 177, 177);
+}
+
+header .container .box:nth-of-type(3) {
+  border-right: 1px solid rgb(177, 177, 177);
+}
+
+.mainHeading {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.red {
+  color: #ff0c02;
+}
+
+.secondary-heading {
+  font-size: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  margin-top: 5px;
+}
+th {
+  background-color: #ff0c02;
+  color: #fff;
+  font-weight: normal;
+}
+th,
+td {
+  border: 1px solid rgb(177, 177, 177);
+  padding: 6px;
+  text-align: center;
+}
+thead {
+  background-color: #f0f0f0;
+}
+tfoot td {
+  background-color: #e0e0e0;
+}
+.right {
+  text-align: right;
+}
+
+footer {
+  margin-top: 10px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+}
+
+.footer-box {
+  padding: 5px;
+  line-height: 1.6;
+}
+
+.footer-box:nth-of-type(1),
+.footer-box:nth-of-type(2) {
+  border-right: 1px solid black;
+  width: 35%;
+}
+
+.footer-box:nth-of-type(3) {
+  width: 20%;
+}
+
+.footer-box .footer-heading {
+  font-size: 14px;
+}
+
+.certify {
+  font-size: 12px;
+  margin-top: 1rem;
+}
+
+@media print {
+  @page {
+    size: A5 portrait;
+    margin: 2mm;
+  }
+  body {
+    margin: 0;
+  }
+}

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice</title>
+    <!-- <link rel="stylesheet" href="invoiceStyles.css" /> -->
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DejaVu Sans", sans-serif;
+        color: #333;
+        padding: 1rem;
+      }
+
+      p {
+        font-size: 12px;
+      }
+
+      .top {
+        position: relative;
+        text-align: center;
+      }
+
+      .top p:nth-of-type(2) {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+
+      .wrapper {
+        border: 1px solid black;
+      }
+
+      .left,
+      .right {
+        width: 50%;
+      }
+
+      .left {
+        border-right: 1px solid black;
+        /* border-bottom: 1px solid black; */
+      }
+
+      .left div:nth-of-type(1),
+      .left div:nth-of-type(2) {
+        border-bottom: 1px solid black;
+        padding: 8px;
+      }
+
+      .right div {
+        display: flex;
+        justify-content: space-between;
+        min-height: 4vh;
+      }
+
+      .right div p {
+        width: 50%;
+        border: 1px solid black;
+        min-height: 4vh;
+        padding: 8px;
+        padding-right: 0;
+      }
+
+      .right div:nth-last-of-type(1) p {
+        width: 100%;
+        border-right: none;
+      }
+
+      .right div p:nth-of-type(1) {
+        border-left: none;
+        border-top: none;
+      }
+
+      .right div:nth-last-of-type(1) p {
+        border: none;
+      }
+
+      .right div p:nth-of-type(2) {
+        border-left: none;
+        border-top: none;
+        border-right: none;
+      }
+
+      .invoiceNumber,
+      .invoiceDate {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .address-details {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .logo {
+        width: 80px;
+        height: auto;
+        margin-right: 20px;
+      }
+
+      .company-info {
+        padding: 8px;
+      }
+
+      .company-info h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .customer-info,
+      .totals {
+        margin-top: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      table:nth-of-type(1) {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        font-size: 12px;
+        text-align: left;
+      }
+
+      .final-table th,
+      .final-table td {
+        padding: 3px;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+      .totals td {
+        border: none;
+        padding: 5px 0;
+      }
+
+      .chargable div:first-of-type,
+      .chargable {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .chargable {
+        flex-direction: column;
+      }
+
+      .footer {
+        margin-top: 40px;
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .footer-bottom {
+        width: 100%;
+        display: flex;
+      }
+
+      .footer-bottom-left {
+        flex: 1;
+      }
+
+      .footer-bottom-right {
+        width: 50%;
+        border: 1px solid #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <p>Tax Invoice</p>
+      <p>ORIGINAL FOR RECIPIENT</p>
+    </div>
+    <div class="wrapper">
+      <div class="address-details">
+        <div class="left">
+          <div>
+            <p><strong>Customer:</strong> {{customer.name}}</p>
+            <p><strong>Phone:</strong> {{customer.phone}}</p>
+            <p><strong>Email:</strong> {{customer.email}}</p>
+            <p><strong>Address:</strong> {{customer.address}}</p>
+          </div>
+          <div class="company-info">
+            <p>Consignee ( Ship to )</p>
+            <h1>sree traders kadayam</h1>
+            <p>6/122B, North car street,</p>
+            <p>Kadayam</p>
+            <p>8903055867</p>
+            <p>GSTIN/UIN : 33FUBPS2022C1Z7</p>
+            <p>State : Tamilnadu, code : 33</p>
+          </div>
+          <div class="company-info">
+            <p>Buyer ( Bill to )</p>
+            <h1>sree traders kadayam</h1>
+            <p>6/122B, North car street,</p>
+            <p>Kadayam</p>
+            <p>8903055867</p>
+            <p>GSTIN/UIN : 33FUBPS2022C1Z7</p>
+            <p>State : Tamilnadu, code : 33</p>
+          </div>
+        </div>
+        <div class="right">
+          <div>
+            <p class="invoiceNumber">
+              <strong>Invoice No:</strong> {{invoiceNumber}}
+            </p>
+            <p class="invoiceDate"><strong>Date:</strong> {{date}}</p>
+          </div>
+          <div>
+            <p>Delivery Note</p>
+            <p>Mode/Terms of Payment</p>
+          </div>
+          <div>
+            <p>Ref No. & Date</p>
+            <p>Other References</p>
+          </div>
+          <div>
+            <p>Buyer's Order No.</p>
+            <p>Dated</p>
+          </div>
+          <div>
+            <p>Dispatch Doc No.</p>
+            <p>Delivery Note Date</p>
+          </div>
+          <div>
+            <p>Dispatched Through</p>
+            <p>Destination</p>
+          </div>
+          <div>
+            <p>Terms of delivery</p>
+          </div>
+        </div>
+      </div>
+      <div class="goods-details"></div>
+      <div class="price-details"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>SI.No</th>
+            <th>Description of Goods</th>
+            <th>HSN/SAC</th>
+            <th>Quantity</th>
+            <th>Rate ( Incl. of Tax )</th>
+            <th>Rate</th>
+            <th>Per</th>
+            <th>Disc. %</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+          <tr>
+            <td>{{sno}}</td>
+            <td>{{productName}}</td>
+            <td>{{hsn}}</td>
+            <td>{{quantity}}</td>
+            <td>{{rateInc}}</td>
+            <td>{{price}}</td>
+            <td>{{per}}</td>
+            <td>{{discount}}</td>
+            <td>{{taxableAmount}}</td>
+          </tr>
+          {{/each}}
+
+          <tr>
+            <td colspan="8" style="text-align: center">CGST</td>
+            <td>{{totalCGST}}</td>
+          </tr>
+          <tr>
+            <td colspan="8" style="text-align: center">SGST</td>
+            <td>{{totalSGST}}</td>
+          </tr>
+          <tr>
+            <td colspan="8" style="text-align: center">RoundingOff</td>
+            <td>{{roundingOff}}</td>
+          </tr>
+          <tr style="background-color: #f3f3f3">
+            <td></td>
+            <td style="text-align: center">Total</td>
+            <td></td>
+            <td>{{totalQuantity}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{totalAmount}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="chargable">
+        <div>
+          <p>Amount chargable ( in words )</p>
+          <p>E. & O.E</p>
+        </div>
+        <div>
+          <p>{{amountInWords}}</p>
+        </div>
+      </div>
+
+      <table class="final-table">
+        <thead>
+          <!-- First header row -->
+          <tr>
+            <th rowspan="2">HSN/SAC</th>
+            <th rowspan="2">Taxable Value</th>
+            <th colspan="2" style="text-align: center">CGST</th>
+            <th colspan="2" style="text-align: center">SGST/UTGST</th>
+            <th rowspan="2">Total Tax Amount</th>
+          </tr>
+
+          <!-- Subheading row under CGST and SGST -->
+          <tr>
+            <th>Rate</th>
+            <th>Amount</th>
+            <th>Rate</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+          <tr>
+            <td>{{hsn}}</td>
+            <td>{{taxableAmount}}</td>
+            <td>{{halfGst}}%</td>
+            <td>{{cgst}}</td>
+            <td>{{halfGst}}%</td>
+            <td>{{sgst}}</td>
+            <td>{{gstAmount}}</td>
+          </tr>
+
+          {{/each}}
+          <tr style="background-color: #f3f3f3">
+            <td style="text-align: center">Total</td>
+            <td>{{totalTaxableAmount}}</td>
+            <td></td>
+            <td>{{totalCGST}}</td>
+            <td></td>
+            <td>{{totalSGST}}</td>
+            <td>{{totalGSTAmount}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <table class="totals">
+        <tr>
+          <td><strong>Subtotal:</strong></td>
+          <td>₹{{subtotal}}</td>
+        </tr>
+        <tr>
+          <td><strong>Discount:</strong></td>
+          <td>₹{{discount}}</td>
+        </tr>
+        <tr>
+          <td><strong>GST:</strong></td>
+          <td>₹{{gstTotal}}</td>
+        </tr>
+        <tr>
+          <td><strong>Rounding Off:</strong></td>
+          <td>₹{{roundingOff}}</td>
+        </tr>
+        <tr>
+          <td><strong>Grand Total:</strong></td>
+          <td><strong>₹{{grandTotal}}</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Paid:</strong></td>
+          <td>₹{{paid}}</td>
+        </tr>
+        <tr>
+          <td><strong>Balance:</strong></td>
+          <td>₹{{balance}}</td>
+        </tr>
+      </table> -->
+
+      <div class="chargable">
+        <div>
+          <p>Tax Amount ( in words )</p>
+        </div>
+        <div>
+          <p>{{gstAmountInWords}}</p>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="footer-top">
+          <p>Company's Bank Details</p>
+          <p>Bank name : <strong>KARUR VYSYA BANK - TRICHY</strong></p>
+          <p>A/c No : <strong>1816115000000240</strong></p>
+          <p>Bank name : <strong>KARUR VYSYA BANK - TRICHY</strong></p>
+          <p>Branch & IFSC code <strong>Trichy & KVBL0001816</strong></p>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            <p style="text-decoration: underline">Declaration</p>
+            <p>
+              We declare that this invoice shows the actual price of the goods
+              described and that all the particulars are true and correct
+            </p>
+          </div>
+          <div class="footer-bottom-right"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
