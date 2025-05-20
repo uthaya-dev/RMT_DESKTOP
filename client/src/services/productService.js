@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/products"; // Make sure your backend URL is correct
+const API_URL = "http://localhost:3001/api/products"; // Make sure your backend URL is correct
 
 // Get all customers
 export const getProducts = async (params = {}) => {
