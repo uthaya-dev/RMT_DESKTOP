@@ -1,49 +1,43 @@
-const path = require("path");
 const { app, BrowserWindow } = require("electron");
+const path = require("path");
 const { spawn } = require("child_process");
 
-let mainWindow;
 let backendProcess;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+  const win = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
-      nodeIntegration: false, // Adjust as per your security needs
+      nodeIntegration: false,
       contextIsolation: true,
     },
   });
 
-  const startURL = app.isPackaged
-    ? `file://${path.join(__dirname, "/client/dist/index.html")}` // packaged path
-    : `file://${path.join(__dirname, "/client/dist/index.html")}`; // dev build path or change to dev server URL if used
-
-  mainWindow.loadURL(startURL);
-  console.log(startURL, "startUrl");
-
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
+  // Load your frontend dist/index.html or URL
+  win.loadFile(path.join(__dirname, "client", "dist", "index.html"));
 }
 
 app.whenReady().then(() => {
-  // Resolve backend server path
-  const serverPath = app.isPackaged
-    ? path.join(process.resourcesPath, "server") // packaged app resources/server
-    : path.join(__dirname, "server"); // dev mode server folder
-  console.log(serverPath, "serverpath");
-  // Start backend Node process
-  backendProcess = spawn("node", [path.join(serverPath, "index.js")]);
+  // Start backend server as child process
+  const backendPath = path.join(__dirname, "server", "index.js");
 
+  backendProcess = spawn("node", [backendPath], {
+    stdio: ["ignore", "pipe", "pipe"], // ignore stdin, pipe stdout & stderr
+  });
+
+  // Log backend stdout
   backendProcess.stdout.on("data", (data) => {
-    console.log(`Backend stdout: ${data}`);
+    console.log(`[Backend stdout]: ${data.toString()}`);
   });
+
+  // Log backend stderr
   backendProcess.stderr.on("data", (data) => {
-    console.error(`Backend stderr: ${data}`);
+    console.error(`[Backend stderr]: ${data.toString()}`);
   });
+
   backendProcess.on("close", (code) => {
-    console.log(`Backend process exited with code ${code}`);
+    console.log(`[Backend process exited] code: ${code}`);
   });
 
   createWindow();
@@ -53,11 +47,14 @@ app.whenReady().then(() => {
   });
 });
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    if (backendProcess) {
-      backendProcess.kill();
-    }
-    app.quit();
+// Kill backend process when Electron app quits
+app.on("will-quit", () => {
+  if (backendProcess) {
+    backendProcess.kill();
   }
+});
+
+// Also quit app when all windows are closed (except macOS convention)
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
 });
